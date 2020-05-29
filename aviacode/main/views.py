@@ -73,7 +73,7 @@ class TaskDetailView(DetailView):
 
 
 def posts_easy(request):
-    post = Task.objects.all()
+    post = Task.objects.filter(lvl__name='easy')
     category = Category.objects.order_by('easy')
     context = {
         'post': post,
@@ -81,4 +81,3 @@ def posts_easy(request):
         'title': 'Post list'
     }
     return render(request, 'main/easy.html', context)
-
