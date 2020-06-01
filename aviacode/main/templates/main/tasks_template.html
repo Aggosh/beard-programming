@@ -1,46 +1,70 @@
 {% extends 'main/base.html' %}
 {% load static %}
 {% block title %}
-    Задача n
+    {{article}}
 {% endblock %}
 
 {% block content %}
-    <div class="container-fluid">
-        <div class="row justify-content-around align-items-center" style=" height: 200px">
-            <a href="#" class="top-bar-content" style="color: #59a959;">EASY</a>
-            <a href="#" class="top-bar-content" style="color: #e4be77;">SOMEWHAT</a>
-            <a href="#" class="top-bar-content" style="color: #e66d6d;">HARD</a>
-        </div>
-        <div class="row justify-content-around">
-            <div class="col-md-5 task_bar">
-                {% block task_text %}
-                <div class="p-3 mb-2 bg-light text-dark">{{textarea}}</div>
-                
-                {% endblock task_text %}
-            </div>
-            <div class="col-md-6 code_bar">
-                <div class="row task_name">
-                    {% block task_name %}{{article}}{% endblock task_name %}
+<div class="container-fluid" style="background-color: darkslategray">
+    <div class="container justify-content-center home-page-mid-bar">
+        <br><br>
+        <div class="container-fluid justify-content-center">
+        <form class="" method="post">
+            <div class="row justify-content-around">
+                <div class="col-md-5 task_bar">
+                        {% block task_text %}
+                        <div class="p-3 mb-2 bg-light text-dark" style="border-radius: 18px;">  {{textarea}}
+                            <br><br>
+                        <div class="p-3 mb-2 bg-dark text-light" style="border-radius: 30px;">  Примеры:<br>{{examples|safe}}</div>
+                        <div class="p-3 mb-2 bg-dark text-light" style="border-radius: 30px;">  Тесты:<br><pre><code data-language="Python">{{ asserts }}</code></pre></div>
+
+                            {% endblock task_text %}
+                        </div>
+                    {% if result %}
+                    <div class="p-3 mb-2 text-dark" style="border-radius:   18px;background-color: #c28d8d;">
+                            Ошибка: {{ result }}
+                    </div>
+                    {% endif %}
+                    {% if process_time %}
+                    <div class="p-3 mb-2 text-dark" style="border-radius:   18px;background-color: #bcbe4a;">Время выполнения: {{ process_time }} сек</div>{% endif %}
+                    {% if memory.1 %}
+                    <div class="p-3 mb-2 text-dark" style="border-radius:   18px;background-color: #bcbe4a;">Использование памяти: {{ memory.1 }}</div>{% endif %}
+                    {% if output %}
+                    <div class="p-3 mb-2 text-dark" style="border-radius:   18px;background-color: #acb484;">Принты: {{ output }}</div>{% endif %}
+                    {% if process_time %}
+                    <div class="p-3 mb-2 text-dark" style="border-radius:   18px;background-color: {% if rating == 'F'  %}#c28d8d;{% endif %} {% if rating == 'E'  %}#F1C40F;{% endif %} {% if rating == 'D'  %}#48C9B0;{% endif %} {% if rating == 'C'  %}#229954;{% endif %} {% if rating == 'B'  %}#229954;{% endif %} {% if rating == 'A'  %}#239B56;{% endif %}">Оценка: {{ rating }}</div>
+                    {% endif %}
+
                 </div>
-                <div class="row">
-                    <a href="#" class="col bottom-code-bar">
-                        Пропустить
-                    </a>
-                    <a href="#" class="col bottom-code-bar">
-                        Комментировать
-                    </a>
-                    <a href="#" class="col bottom-code-bar">
-                        показать решение
-                    </a>
+                <div class="col-md-5 code_bar">
+                    <div class="row task_name">
+                        {% block task_name %}{{article}}{% endblock task_name %}
+                    </div>
+                    <div class="row">
+                        <p>В вашем решении должен быть метод "main", он являеться входной точкой.</p>
+                    </div>
+                    <div class="row">
+                        {% csrf_token %}
+                        <textarea id="code-area" type="text" name="code" style="width:  100%;height: 300px;">{{ code }}</textarea>
+                    </div>
+                    <div class="row">
+                        <a href="/task_template/{{ next_task }}/" class="col bottom-code-bar">
+                            Пропустить
+                        </a>
+                        <a href="comments/" class="col bottom-code-bar">
+                            Комментировать
+                        </a>
+                        <a href="solution/" class="col bottom-code-bar">
+                            Показать решение
+                        </a>
+                        <input style="margin: 0 auto; border: none; width: 100%;" class="bottom-code-bar" type="submit" value="Отправить">
+                    </div>
                 </div>
-                <form class="" method="post">
-                    {% csrf_token %}
-                    <textarea id="code-area" type="text" name="code"></textarea>
-                    <input class="bottom-code-bar" type="submit" value="Отправить">
-                    {% if result %}<div>Result: {{ result }}</div>{% endif %}
-                    {% if process_time %}<div>Time: {{ process_time }}</div>{% endif %}
-                    {% if output %}<div>Output: {{ output }}</div>{% endif %}
             </div>
+        </form>
         </div>
+<br><br><br><br><br><br>
     </div>
+
+</div>
 {% endblock %}
